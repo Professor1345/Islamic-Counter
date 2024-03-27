@@ -81,14 +81,14 @@ const App = () => {
 
         <div className="bg-green-500 fixed left-0 bottom-0 w-full flex flex-row justify-between">
           <button
-            className="w-full max-w-6 md:max-w-8 m-2 cursor-pointer"
+            className="w-full max-w-6 md:max-w-7 m-2 cursor-pointer"
             onClick={resetCounter}
           >
             <img src={Reset} alt="Reset" />
           </button>
           <div>
             <button
-              className={`w-full max-w-6 md:max-w-8 h-auto m-2 cursor-pointer ${
+              className={`w-full max-w-6 md:max-w-7 h-auto m-2 cursor-pointer ${
                 soundEnabled ? "block" : "hidden"
               }`}
               onClick={noSoundClick}
@@ -96,7 +96,7 @@ const App = () => {
               <img src={noSound} alt="No Sound" />
             </button>
             <button
-              className={`w-full max-w-6 md:max-w-8 m-2 cursor-pointer ${
+              className={`w-full max-w-6 md:max-w-7 m-2 cursor-pointer ${
                 soundEnabled ? "hidden" : "block"
               }`}
               onClick={SoundClick}
