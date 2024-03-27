@@ -1,4 +1,4 @@
-**Islamic Counter App**
+# **Islamic Counter App**
 
 This simple React application provides a counter with sound effects. It allows users to increment a counter, reset it, and toggle sound effects on and off. Below is a brief overview of the application structure and functionality.
 
