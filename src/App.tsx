@@ -42,7 +42,7 @@ const App = () => {
   };
   return (
     <div className="flex flex-col justify-end items-center h-screen relative">
-      <div className="text-white text-5xl md:text-4xl font-bold my-6">
+      <div className="text-white text-[40px] md:text-4xl font-bold my-6">
         Islamic Counter
       </div>
       <img
