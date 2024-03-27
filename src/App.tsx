@@ -42,11 +42,14 @@ const App = () => {
   };
   return (
     <div className="flex flex-col justify-end items-center h-screen relative">
+      <div className="text-white text-3xl md:text-4xl font-bold my-6">
+        Islamic Counter
+      </div>
       <img
         src={BG}
         alt="Background Image"
         rel="preload"
-        className="block size-full object-cover object-center absolute -z-10 brightness-[200%]"
+        className="block size-full object-cover object-center top-0 left-0 absolute -z-10 brightness-[200%]"
       />
       <div className=" h-[85%] flex flex-col justify-center">
         <div className="py-4 px-2 text-center text-black bg-white text-xl md:text-3xl rounded-xl border-solid border border-gray-800">
@@ -79,7 +82,7 @@ const App = () => {
           </button>
         </div>
 
-        <div className="bg-green-500 fixed left-0 bottom-0 w-full flex flex-row justify-between">
+        <div className="bg-green-500 fixed left-0 bottom-0 z-20 w-full flex flex-row justify-between">
           <button
             className="w-full max-w-6 md:max-w-7 m-2 cursor-pointer"
             onClick={resetCounter}
