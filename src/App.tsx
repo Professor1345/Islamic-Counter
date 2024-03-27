@@ -41,7 +41,7 @@ const App = () => {
     setSoundEnabled(true);
   };
   return (
-    <div className="flex flex-col justify-end items-center h-screen">
+    <div className="flex flex-col justify-end items-center h-screen relative">
       <img
         src={BG}
         alt="Background Image"
