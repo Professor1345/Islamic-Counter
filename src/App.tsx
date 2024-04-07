@@ -19,9 +19,12 @@ const App = () => {
   // ) {
   //   throw new Error("Counter is undefined");
   // }
+  const [audio] = useState(new Audio(clickSound));
   const onCount = () => {
     if (soundEnabled) {
-      const audio = new Audio(clickSound);
+     
+      audio.playbackRate = 5;
+      audio.currentTime = 0;
       audio.play();
     }
 
