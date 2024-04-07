@@ -1,6 +1,6 @@
 // import React from 'react'
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import clickSound from "./assets/button-16.mp3";
 import Reset from "./assets/reset.svg";
 import Sound from "./assets/sound.svg";
@@ -19,10 +19,11 @@ const App = () => {
   // ) {
   //   throw new Error("Counter is undefined");
   // }
-  const [audio] = useState(new Audio(clickSound));
+  // const [audio] = useState(new Audio(clickSound));
+  const audioRef = React.useRef<HTMLAudioElement>(new Audio(clickSound));
   const onCount = () => {
     if (soundEnabled) {
-     
+      const audio = audioRef.current;
       audio.playbackRate = 5;
       audio.currentTime = 0;
       audio.play();
