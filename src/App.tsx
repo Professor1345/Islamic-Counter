@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import React from 'react'
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 // import clickSound from "./assets/button-16.mp3";
 import Reset from "./assets/reset.svg";
 import Sound from "./assets/sound.svg";
@@ -24,38 +24,66 @@ const App : React.FC = () => {
   // const audioRef = React.useRef<HTMLAudioElement>(new Audio(clickSound));
 
 
-  const playBeep = () => {
-    // Create a NEW audio context and nodes for each click
-    const audioContext = new ((window as any).AudioContext || (window as any).webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
 
-    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
-    gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+  // Initialize audio context and nodes once
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      audioContextRef.current = new AudioContext();
+      gainNodeRef.current = audioContextRef.current.createGain();
+      gainNodeRef.current.connect(audioContextRef.current.destination);
+    }
+  }, []);
+
+  const playBeep = useCallback(() => {
+    if (!audioContextRef.current || !gainNodeRef.current) return;
+
+    // Create new oscillator for each click
+    const oscillator = audioContextRef.current.createOscillator();
+    oscillator.type = 'square';
     
-    // Short decay to allow rapid playback
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+    // Configure tone parameters
+    oscillator.frequency.setValueAtTime(
+      440, // A4 note frequency
+      audioContextRef.current.currentTime
+    );
 
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    // Set gain envelope for crisp, short tone
+    gainNodeRef.current.gain.setValueAtTime(
+      0.5,
+      audioContextRef.current.currentTime
+    );
+    gainNodeRef.current.gain.exponentialRampToValueAtTime(
+      0.01,
+      audioContextRef.current.currentTime + 0.02 // 20ms duration
+    );
 
+    // Connect and play
+    oscillator.connect(gainNodeRef.current);
     oscillator.start();
-    oscillator.stop(audioContext.currentTime + 0.05); // Very short tone
+    oscillator.stop(audioContextRef.current.currentTime + 0.02);
 
-    // Cleanup to prevent memory leaks
-    setTimeout(() => audioContext.close(), 100);
-  };
+    // Cleanup oscillator after playback
+    setTimeout(() => oscillator.disconnect(), 50);
+  }, []);
 
   const onCount = () => {
+    
+    setCounter((counter) => counter + 1);
     if (soundEnabled) {
       // const audio = audioRef.current;
       // audio.playbackRate = 5;
       // audio.currentTime = 0;
       // audio.play();
+       // Handle Safari/iOS audio context suspension
+    if (audioContextRef.current?.state === 'suspended') {
+      audioContextRef.current.resume();
+    }
       playBeep();
     }
 
-    setCounter((counter) => counter + 1);
     localStorage.setItem("counter", counter.toString());
   };
 
