@@ -40,35 +40,26 @@ const App : React.FC = () => {
   const playBeep = useCallback(() => {
     if (!audioContextRef.current || !gainNodeRef.current) return;
 
-    // Create new oscillator for each click
+    // Create a new oscillator for each click
     const oscillator = audioContextRef.current.createOscillator();
-    oscillator.type = 'square';
-    
-    // Configure tone parameters
-    oscillator.frequency.setValueAtTime(
-      440, // A4 note frequency
-      audioContextRef.current.currentTime
-    );
+    oscillator.type = 'square'; // Sharp, crisp tone
+    oscillator.frequency.setValueAtTime(440, audioContextRef.current.currentTime);
 
-    // Set gain envelope for crisp, short tone
-    gainNodeRef.current.gain.setValueAtTime(
-      0.5,
-      audioContextRef.current.currentTime
-    );
+    // Configure gain for instant playback
+    gainNodeRef.current.gain.setValueAtTime(1, audioContextRef.current.currentTime); // Full volume
     gainNodeRef.current.gain.exponentialRampToValueAtTime(
-      0.01,
-      audioContextRef.current.currentTime + 0.02 // 20ms duration
+      0.01, // Fade out quickly
+      audioContextRef.current.currentTime + 0.01 // 10ms duration
     );
 
     // Connect and play
     oscillator.connect(gainNodeRef.current);
     oscillator.start();
-    oscillator.stop(audioContextRef.current.currentTime + 0.02);
+    oscillator.stop(audioContextRef.current.currentTime + 0.01); // Stop after 10ms
 
     // Cleanup oscillator after playback
-    setTimeout(() => oscillator.disconnect(), 50);
+    setTimeout(() => oscillator.disconnect(), 20); // Disconnect after 20ms
   }, []);
-
   const onCount = () => {
     
     setCounter((counter) => counter + 1);
