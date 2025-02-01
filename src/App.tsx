@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // import React from 'react'
 
 import React, { useState, useEffect } from "react";
@@ -20,13 +21,38 @@ const App = () => {
   //   throw new Error("Counter is undefined");
   // }
   // const [audio] = useState(new Audio(clickSound));
-  const audioRef = React.useRef<HTMLAudioElement>(new Audio(clickSound));
+  // const audioRef = React.useRef<HTMLAudioElement>(new Audio(clickSound));
+
+
+  const playBeep = () => {
+    // Create a NEW audio context and nodes for each click
+    const audioContext = new ((window as any).AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+    gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+    
+    // Short decay to allow rapid playback
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.05); // Very short tone
+
+    // Cleanup to prevent memory leaks
+    setTimeout(() => audioContext.close(), 100);
+  };
+
   const onCount = () => {
     if (soundEnabled) {
-      const audio = audioRef.current;
-      audio.playbackRate = 5;
-      audio.currentTime = 0;
-      audio.play();
+      // const audio = audioRef.current;
+      // audio.playbackRate = 5;
+      // audio.currentTime = 0;
+      // audio.play();
+      playBeep();
     }
 
     setCounter((counter) => counter + 1);
@@ -100,7 +126,7 @@ const App = () => {
               }`}
               onClick={noSoundClick}
             >
-              <img src={noSound} alt="No Sound" />
+              <img src={Sound} alt="Sound" />
             </button>
             <button
               className={`w-full max-w-6 md:max-w-7 m-2 cursor-pointer ${
@@ -108,7 +134,7 @@ const App = () => {
               }`}
               onClick={SoundClick}
             >
-              <img src={Sound} alt="Sound" />
+              <img src={noSound} alt="No Sound" />
             </button>
           </div>
         </div>
