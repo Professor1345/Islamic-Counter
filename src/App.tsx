@@ -2,12 +2,12 @@
 // import React from 'react'
 
 import React, { useState, useEffect } from "react";
-import clickSound from "./assets/button-16.mp3";
+// import clickSound from "./assets/button-16.mp3";
 import Reset from "./assets/reset.svg";
 import Sound from "./assets/sound.svg";
 import noSound from "./assets/no-sound.svg";
 import BG from "./assets/BG.png";
-const App = () => {
+const App : React.FC = () => {
   const [counter, setCounter] = useState<number>(
     0 || Number(localStorage.getItem("counter"))
   );
@@ -108,7 +108,7 @@ const App = () => {
             className=" text-white font-semibold text-2xl md:text-3xl p-4 bg-green-500 size-60 flex justify-center items-center rounded-full hover:shadow-lg hover:shadow-green-300"
             onClick={onCount}
           >
-            Counter
+            Count
           </button>
         </div>
 
